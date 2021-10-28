@@ -4,6 +4,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { fontBold } from '../common/Constains';
 import PrimaryPicker from '../common/PrimaryPicker';
 import PrimaryBtn from '../common/PrimaryBtn';
+import Slider from "react-native-slider";
 
 class CalculatorScreenComponent extends Component {
   constructor(props) {
@@ -50,7 +51,38 @@ class CalculatorScreenComponent extends Component {
           <View style={styles.resultView}>
             <Text style={styles.resText}>{this.props.result}</Text>
           </View>
+
           <View style={styles.inputBox}>
+          <Slider
+          value={firstNumber}
+          onValueChange={value => onChangeFirstNumber(value)}
+          minimumValue={0}
+          maximumValue={99}
+          step={1}
+          minimumTrackTintColor='red'
+          maximumTrackTintColor='gray'
+        />
+        <Text>
+        First Number: {firstNumber}
+        </Text>
+        </View>
+
+        <View style={styles.inputBox}>
+          <Slider
+          value={secondNumber}
+          onValueChange={value => onChangeSecondNumber(value)}
+          minimumValue={0}
+          maximumValue={99}
+          step={1}
+          minimumTrackTintColor='red'
+          maximumTrackTintColor='gray'
+        />
+        <Text>
+        Second Number: {secondNumber}
+        </Text>
+        </View>
+
+          {/* <View style={styles.inputBox}>
                 <TextInput
                   placeholder="Enter First Number"
                   placeholderTextColor="#ccc"
@@ -60,8 +92,8 @@ class CalculatorScreenComponent extends Component {
                   value={firstNumber} 
                   onChangeText={(value)=>onChangeFirstNumber(value)}
                 />
-          </View>
-          <View style={styles.inputBox}>
+          </View> */}
+          {/* <View style={styles.inputBox}>
                 <TextInput
                   placeholder="Enter Second Number"
                   maxLength={2}
@@ -71,7 +103,7 @@ class CalculatorScreenComponent extends Component {
                   value={secondNumber} 
                   onChangeText={(value)=>onChangeSecondNumber(value)}
                 />
-          </View>
+          </View> */}
           <PrimaryPicker
               selectedItem={this.props.selectedOperation}
               itemList={this.props.operationList}
@@ -139,17 +171,8 @@ const styles = StyleSheet.create({
   },
 
   inputBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 24,
-    borderColor: '#e8e8e8',
-    borderWidth: 1,
-    paddingRight: 10,
-    width: '90%',
     alignSelf: 'center',
-    elevation: 8,
-    marginTop: 18
+    width: '90%'
   },
 
   borderCircle: {

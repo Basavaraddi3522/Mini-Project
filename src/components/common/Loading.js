@@ -8,7 +8,7 @@ import {WIDTH} from './Constains';
 class LoadingModel extends Component {
     render() {
         return (
-        <Modal isVisible={this.props.loading} backdropOpacity={0.6} >
+        <Modal isVisible={this.props.loading} backdropOpacity={0.8} >
             <View style={styles.modalContainer}>
                 <View style={styles.modalView}>
                     <Image

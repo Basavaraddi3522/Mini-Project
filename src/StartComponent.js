@@ -17,12 +17,12 @@ class Main extends Component {
     if (user) {
       setTimeout(() => {
         this.setState({currentScreen: 'HomeTabs'})
-      }, 2000) 
+      }, 3000) 
     }
     else {
       setTimeout(() => {
         this.setState({currentScreen: 'LoginContainer'})
-      }, 2000)  
+      }, 3000)  
     }
   }
 

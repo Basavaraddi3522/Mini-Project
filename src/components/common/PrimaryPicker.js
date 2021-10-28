@@ -14,7 +14,7 @@ export default class PrimaryPicker extends Component {
           style={styles.pickerStyle}>
           {this.props.itemList
             ? this.props.itemList.map((item, index) => {
-                return <Picker.Item label={item.label} value={item.value} />;
+                return <Picker.Item label={item.label} value={item.value} key={index}/>;
               })
             : null}
         </Picker>

@@ -17,11 +17,11 @@ export default class TextScreenContainer extends Component {
   };
 
   componentDidMount = () => {
-    this.setState({loading: true})
     this.getAllTextFromFireStore()
   }
   
   getAllTextFromFireStore = async () => {
+    this.setState({loading: true})
     let data = []
     const reference = firestore()
     .collection('users')
@@ -35,16 +35,16 @@ export default class TextScreenContainer extends Component {
   }
   
   
-  uploadTextToFireStore = () => {
+  uploadTextToFireStore = () => {    
+    this.setState({enteredText: ''})
     this.setState({loading: true})
     if(this.state.enteredText.trim()){
       const reference = firestore()
     .collection('users')
     reference.add({'message': this.state.enteredText}).then((snapshot) => {
+      this.setState({loading: false})
       console.log("snapshot", snapshot);
       this.getAllTextFromFireStore()
-      this.setState({enteredText: ''})
-      this.setState({loading: false})
     })
     }   
   }

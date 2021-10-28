@@ -44,7 +44,7 @@ class TextScreenComponent extends Component {
         <FlatList
             data={this.props.data}
             renderItem={this.renderItem}
-            keyExtractor={({index})=>index}
+            listkey ={(item, index) => item.key}
             showsVerticalScrollIndicator={false}
           />
           <View style={styles.inputBox}>

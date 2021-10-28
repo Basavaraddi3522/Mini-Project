@@ -59,7 +59,7 @@ export default class LoginContainer extends Component {
     const {username, password} = this.state
     auth().signInWithEmailAndPassword(username, password)
     .then(() => {
-      this.setState({loading: true})
+      this.setState({loading: false})
       this.props.navigation.navigate('HomeTabs');
       Toast.show({
         type: "success", 
@@ -68,7 +68,7 @@ export default class LoginContainer extends Component {
       })
     })
     .catch(error => {
-      this.setState({loading: true})
+      this.setState({loading: false})
       if (error.code === 'auth/invalid-email') {
         Toast.show({
           type: "error", 
@@ -97,9 +97,7 @@ export default class LoginContainer extends Component {
           text1: 'User Not Found!'
         })
       }
-      this.setState({loading: false})
   });
-  this.setState({loading: false})
 }
 
   onForgetPassword = () => {

@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 Parse.setAsyncStorage(AsyncStorage);
 Parse.initialize('yg6XvSEAejoGQ31lB4PKeHjuxNEKz17aEi36ZVRg','ocRQwLxPxTtD0FCa6yAVBFafUkHY525IFtxRsSQI');
 Parse.serverURL = 'https://parseapi.back4app.com/';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +17,6 @@ class App extends Component {
 
   async componentDidMount() {
     this.checkPermission();
-    this.createNotificationListeners();
   }
 
   async checkPermission() {
@@ -35,7 +35,6 @@ class App extends Component {
         if (fcmToken) {
             // user has a device token
             await AsyncStorage.setItem('fcmToken', fcmToken);
-            console.log("fcmToken:::::::::::::::::::::::::",fcmToken);
         }
     }
   }

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableNativeFeedback, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, TouchableNativeFeedback, PermissionsAndroid, TouchableOpacity, StatusBar, Linking, ScrollView} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { fontBold } from '../common/Constains';
+import { fontBold, WIDTH } from '../common/Constains';
 import GridImageView from 'react-native-grid-image-viewer';
 import RBSheet from "react-native-raw-bottom-sheet";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import LoadingModel from '../common/Loading';
 import Toast from 'react-native-toast-message';
+
 
 class PhotoScreenComponent extends Component {
   constructor(props) {
@@ -23,6 +24,58 @@ class PhotoScreenComponent extends Component {
     this.getAllImagesFromStorage()
   }
 
+  onPressCamera = async () => {
+    this.RBSheet.close()
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+         
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        this.pickImageCamera()
+      } else{
+        setTimeout(() => {
+        Linking.openSettings();
+      }, 3000)
+      Toast.show({
+        type: "error", 
+        position: "bottom",
+        text1: 'Camera Permission denied.!',
+        text2: 'Please accept the permission for accessing Camera.!'
+      })
+    }
+    } else {
+    }
+  };
+
+  onPressMedia = async () => {
+    this.RBSheet.close()
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+         
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        this.pickImageGallery()
+      } else {
+        setTimeout(() => {
+          Linking.openSettings();
+        }, 3000)
+        Toast.show({
+          type: "error", 
+          position: "bottom",
+          text1: 'Media Permission denied.!',
+          text2: 'Please accept the permission for accessing images and files.!'
+        })
+      }
+    } else {
+    }
+  };
+
   getAllImagesFromStorage = () => {
     this.setState({loading: true})
     var data = [];
@@ -30,12 +83,10 @@ class PhotoScreenComponent extends Component {
     storageRef.listAll().then((result) =>{
       result.items.forEach((imageRef)=> {
         // And finally display them
-        imageRef.getDownloadURL().then((url) =>{
-          console.log(url);
+        imageRef.getDownloadURL().then((url) =>{          
+          this.setState({loading: false})
           data.push(url.toString())
           this.setState({images:data})
-          this.setState({loading: false})
-          console.log(this.state.images);
         }).catch(function(error) {
           // Handle any errors
           this.setState({loading: false})
@@ -61,7 +112,7 @@ class PhotoScreenComponent extends Component {
       } else if (response.customButton) {
       } else {
           console.log("response", response);
-          this.props.RBSheet.close()
+          this.RBSheet.close()
           this.uploadImageToStorage(response.assets[0].uri, response.assets[0].fileName)
       }
   });
@@ -74,8 +125,8 @@ class PhotoScreenComponent extends Component {
           { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
       ],
       storageOptions: {
-          skipBackup: true, // do not backup to iCloud
-          path: 'images', // store camera images under Pictures/images for android and Documents/images for iOS
+          skipBackup: true,
+          path: 'images',
       },
   };
   launchImageLibrary(options, response => {
@@ -95,25 +146,26 @@ class PhotoScreenComponent extends Component {
   }
 
   uploadImageToStorage(path, name) {
+    this.setState({loading: true})
     let reference = storage().ref('galaryImages/'+name);
     let task = reference.putFile(path);
     task.then(() => {
+      this.setState({loading: false})
       Toast.show({
         type: "success", 
         position: "bottom",
-        text1: 'Image uploaded to the successfully.!'
+        text1: 'Image uploaded successfully.!'
       })
         console.log('Image uploaded to the bucket!');
         this.getAllImagesFromStorage()
-        this.setState({loading: false})
     }).catch((e) => {
+      this.setState({loading: false})
       Toast.show({
         type: "error", 
         position: "bottom",
-        text1: 'Image uploading image error.!'
+        text1: 'Image uploading error.!'
       })
         console.log('uploading image error => ', e);
-        this.setState({loading: false})
     });
 }
 
@@ -155,7 +207,7 @@ class PhotoScreenComponent extends Component {
           ref={ref => {
             this.RBSheet = ref;
           }}
-          height={140}
+          height={WIDTH/2.5}
           openDuration={250}
           closeOnDragDown={true}
           closeOnPressMask={true}
@@ -169,11 +221,11 @@ class PhotoScreenComponent extends Component {
           }}
         >
           <Text style={styles.imgUploadText}>Upload Image Using,</Text>
-          <TouchableOpacity onPress={this.pickImageCamera}>
+          <TouchableOpacity onPress={this.onPressCamera}>
             <Text style={styles.imgUploadSubText}>1. Open Camera</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={this.pickImageGallery}>
-            <Text style={styles.imgUploadSubText}>2. Open Gallery</Text>
+          <TouchableOpacity onPress={this.onPressMedia}>
+            <Text style={[styles.imgUploadSubText, {marginBottom: 10}]}>2. Open Gallery</Text>
           </TouchableOpacity>
         </RBSheet>
       </View>
@@ -260,7 +312,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '800',
     marginTop: 15,
-    marginLeft: 20,
+    marginHorizontal: 20,
     fontFamily: fontBold
   },
 

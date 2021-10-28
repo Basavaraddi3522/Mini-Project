@@ -84,6 +84,7 @@ export default class SingUpComponent extends Component {
           <PrimaryBtn
             title="Sign Up"
             onPress={() => {
+              this.props.singUpUser()
             }}
             style={{marginVertical: 20, width: '90%', alignSelf: 'center'}}
             enabled={!userEmail == '' && !password == '' && !confirmPassword == ''}

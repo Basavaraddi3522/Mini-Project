@@ -3,6 +3,7 @@ import { BackHandler } from 'react-native';
 import CalculatorScreenComponent from '../../components/Home/CalculatorScreenComponent';
 import auth from '@react-native-firebase/auth';
 import Parse from "parse/react-native.js";
+import Slider from "react-native-slider";
 
 export default class CalculatorScreenContainer extends Component {
   constructor(props) {
@@ -11,26 +12,19 @@ export default class CalculatorScreenContainer extends Component {
       selectedOperation: 'none',
       firstNumber: 0,
       secondNumber: 0,
-      result: 0
+      result: '0',
+      value: '0'
     };
   }  
   
   onClickalculation = async () => {
-    const params = {key: this.state.selectedOperation, number1: Number(this.state.firstNumber), number2: Number(this.state.secondNumber)}
+    const params = {key: this.state.selectedOperation, number1: this.state.firstNumber, number2: this.state.secondNumber}
     const helloFunction = await Parse.Cloud.run('calculator', params);
     this.setState({result: helloFunction})
   }
 
   goBack = () => {
     this.props.navigation.goBack();
-    switch (key) {
-      case value:
-        
-        break;
-    
-      default:
-        break;
-    }
   };
 
   logOut = () => {
