@@ -22,8 +22,8 @@ export default class Splash extends Component {
               source={require('./assets/images/splash.gif')}
               style={styles.logoGif}
             />
-            <Text style={styles.nordText}>Nordstone</Text>
-            <Text style={[styles.nordText, styles.subText]}>Interview Mini-Project</Text>
+            <Text style={styles.nordText}>Mini Project</Text>
+            <Text style={[styles.nordText, styles.subText]}>Push Notification, Get Real-Time Data, Uploading and Fetching Firebase Storage Images</Text>
         </View>
       </>
     );
